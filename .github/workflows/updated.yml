@@ -45,8 +45,8 @@ jobs:
         git pull
         git add counter.txt
         git commit -m "Increment counter to $counter"
-        git push
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       env:
-        GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
         GIT_NAME: ${{ secrets.GIT_NAME }}
