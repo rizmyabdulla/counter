@@ -3,16 +3,6 @@ on:
   schedule:
     - cron: '*/30 * * * *'  # Runs every 30 minutes
   workflow_dispatch:
-    inputs:
-      logLevel:
-        description: Log level
-        required: true
-        default: warning
-        type: choice
-        options:
-          - info
-          - warning
-          - debug
 
 jobs:
   count-job:
@@ -35,6 +25,8 @@ jobs:
 
         echo "$counter" > counter.txt
 
+        echo "::set-output name=counter::$counter"
+
       env:
         GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
 
@@ -44,7 +36,7 @@ jobs:
         git config --global user.name "${{ secrets.GIT_NAME }}"
         git pull
         git add counter.txt
-        git commit -m "Increment counter to $counter"
+        git commit -m "Increment counter to ${{ steps.setup-counter.outputs.counter }}"
         git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
